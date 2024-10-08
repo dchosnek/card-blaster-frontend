@@ -2,7 +2,7 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import './JsonForm.css'; // Import the CSS file for additional styling
 
 
-function cardForm() {
+function cardForm({ isAuthenticated }) {
 
     return (
         <Form>
@@ -13,6 +13,7 @@ function cardForm() {
                     rows={5}
                     placeholder="Card Payload"
                     className="form-control-monospace"
+                    disabled={!isAuthenticated}
                 />
             </Form.Group>
             <Form.Group className="mb-3" controlId="SearchText1">
@@ -20,11 +21,12 @@ function cardForm() {
                 <InputGroup>
                     <Form.Control
                         type="text"
-                        placeholder="destination"
+                        placeholder="destination..."
+                        disabled={!isAuthenticated}
                     />
                 </InputGroup>
             </Form.Group>
-            <Button variant="primary" type="submit">Send</Button>
+            <Button variant="primary" type="submit" disabled={!isAuthenticated}>Send</Button>
         </Form >
     );
 }
