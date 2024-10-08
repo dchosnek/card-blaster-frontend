@@ -1,0 +1,5 @@
+/* Custom CSS class to apply fixed-width (monospace) font */
+.form-control-monospace {
+    font-family: 'Courier New', Courier, monospace; /* Fixed-width font */
+    font-size: 14px; /* Optional: adjust font size for better readability */
+  }

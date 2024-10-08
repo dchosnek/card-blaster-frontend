@@ -1,0 +1,19 @@
+/* CSS for the round avatar */
+.avatar {
+    width: 40px;
+    /* Set the width of the avatar */
+    height: 40px;
+    /* Set the height of the avatar */
+    border-radius: 50%;
+    /* Make the avatar round */
+    border: 2px solid #ffffff;
+    /* Optional: Add a white border around the image */
+    object-fit: cover;
+    /* Ensure the image scales properly */
+}
+
+/* Styling for the blaster icon */
+.blaster-icon {
+    width: 30px;      /* Resize the blaster icon to fit in the Navbar */
+    height: 30px;     /* Maintain consistent dimensions */
+  }
