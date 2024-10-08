@@ -7,7 +7,7 @@ function cardForm() {
     return (
         <Form>
             <Form.Group className="mb-3" controlId="Textarea1">
-                <Form.Label>Enter your adaptive card payload below. Use the Webex Adaptive Card <a href="https://developer.webex.com/buttons-and-cards-designer" target="_blank">Designer</a> to create your card.</Form.Label>
+                <Form.Label>Enter your adaptive card payload below. Use the Webex Adaptive Card <a href="https://developer.webex.com/buttons-and-cards-designer" target="_blank" rel="noreferrer">Designer</a> to create your card.</Form.Label>
                 <Form.Control
                     as="textarea"
                     rows={5}
