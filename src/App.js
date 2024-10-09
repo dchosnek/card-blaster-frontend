@@ -9,23 +9,28 @@ function App() {
 
   // State to store the avatar URL, starting with a default value
   const [avatarUrl, setAvatarUrl] = useState('');
-  
-  // useEffect to extract the query parameter on component mount
-  useEffect(() => {
-    // Get the current URL query parameters
-    const queryParams = new URLSearchParams(window.location.search);
-    
-    // Check if `avatarUrl` exists in the URL and update the state if it does
-    const urlAvatar = queryParams.get('avatarUrl');
-    if (urlAvatar) {
-      setAvatarUrl(urlAvatar);
-      
-      setIsAuthenticated(true);
+  const [nickName, setNickName] = useState('');
 
-      // Use history.replaceState to update the URL without reloading
-      window.history.replaceState({}, '', `${window.location.pathname}`);
-    }
-  }, []); // Empty dependency array ensures this effect only runs once on mount
+  // retrieve session data on page load
+  useEffect(() => {
+    fetch('/status', {
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return null;
+      })
+      .then((data) => {
+        if (data) {
+          setAvatarUrl(data.avatarUrl);
+          setIsAuthenticated(data.isAuthenticated);
+          setNickName(data.nickName);
+        }
+      })
+      .catch((error) => console.error('Fetch error:', error));
+  }, []);
 
 
   return (
@@ -33,9 +38,9 @@ function App() {
       {/* Navbar inside a Container */}
       <Container>
         {/* Navbar Component */}
-        <Navbar isAuthenticated={isAuthenticated} avatarUrl={avatarUrl}/>
+        <Navbar isAuthenticated={isAuthenticated} avatarUrl={avatarUrl} nickName={nickName} />
       </Container>
-      
+
       {/* Main Container */}
       <Container className="mt-4">
         <Row className="justify-content-md-center">
