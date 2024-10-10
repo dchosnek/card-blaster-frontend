@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Modal, Table } from 'react-bootstrap';
 
-function ActivityTable() {
+function ActivityTable({show, setShow}) {
 
   // convert the timestamp to local timezone and format it
   const formatDate = (timestamp) => {
@@ -19,43 +19,58 @@ function ActivityTable() {
     });
   };
 
+  // data is the list of maps to display in the table
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    fetch('/history', {
-      credentials: 'include',
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      return null;
-    })
-    .then((mylist) => {
-      setData(mylist);
+  // change the state of the the visibility of the modal
+  const handleClose = () => setShow(false);
 
-    })
-  },[]);
+  useEffect(() => {
+    // only retrieve history on show = true
+    if (show) {
+      fetch('/history', {
+        credentials: 'include',
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          }
+          return null;
+        })
+        .then((mylist) => {
+          setData(mylist);
+  
+        })
+    }
+  }, [show]);
 
   return (
-    <Table striped hover className="mt-4">
-      <thead>
-        <tr>
-          <th>Timestamp</th>
-          <th>Activity</th>
-          <th>Result</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((entry, index) => (
-          <tr key={index}>
-            <td>{formatDate(entry.timestamp)}</td>
-            <td>{entry.activity}</td>
-            <td>{entry.success ? "success" : ""}</td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Your recent activity</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+
+        <Table striped hover className="mt-4">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Activity</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((entry, index) => (
+              <tr key={index}>
+                <td>{formatDate(entry.timestamp)}</td>
+                <td>{entry.activity}</td>
+                <td>{entry.success ? "success" : ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Modal.Body>
+    </Modal>
   );
 }
 
