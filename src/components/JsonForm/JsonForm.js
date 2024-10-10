@@ -4,50 +4,54 @@ import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import './JsonForm.css'; // Import the CSS file for additional styling
 
-function cardForm({ isAuthenticated, roomList }) {
+function cardForm({ roomList }) {
 
-    const handleSubmit = (event) => {
-        event.preventDefault(); // Prevent default form submission
-    
-        // Get values from the form fields
-        const roomId = event.target.elements.SearchText1.value;
-        const card = event.target.elements.Textarea1.value;
-    
-        // Perform a POST request to /sendcard
-        fetch('/sendcard', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            roomId: roomId, // Set the "roomId" field in the payload
-            card: JSON.parse(card), // Convert the card payload string to an object
-          }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Failed to send card.');
-            }
-            return response.json();
-          })
-          .then((data) => {
-            alert('Card sent successfully!');
-          })
-          .catch((error) => {
-            alert('Failed to send the card.');
-          });
-      };
+    // State variables for each form field
+    const [roomId, setRoomId] = useState('');
+    const [roomType, setRoomType] = useState('');
+    const [card, setCard] = useState('');
 
-    // State to store the selected option
+    // State to store the selected room from typeahead
     const [selected, setSelected] = useState([]);
 
-    // Handler to capture the selected item and log the ID
-    const handleSelection = (selectedOptions) => {
-        setSelected(selectedOptions);
+    const handleSubmit = (event) => {
+        event.preventDefault();         // Prevent default form submission
 
-        if (selectedOptions.length > 0) {
-            const selectedOption = selectedOptions[0];
-            console.log('Selected ID:', selectedOption.id);
+        // Perform a POST request to /sendcard
+        fetch('/sendcard', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                roomId: roomId,         // Set the "roomId" field in the payload
+                card: JSON.parse(card), // Convert the card payload string to an object
+                type: roomType,
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Failed to send card.');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                alert('Card sent successfully!');
+            })
+            .catch((error) => {
+                alert('Failed to send the card.');
+            });
+    };
+
+    // Handler to capture the selected typeahead item and set roomId
+    const handleSelection = (selectedRoom) => {
+        setSelected(selectedRoom);
+
+        if (selectedRoom.length > 0) {
+            const selectedOption = selectedRoom[0];
+            setRoomId(selectedOption.id);
+            setRoomType(selectedOption.type);
+            console.log(selectedOption.title, ':', selectedOption.id);
         }
     };
 
@@ -60,31 +64,23 @@ function cardForm({ isAuthenticated, roomList }) {
                     rows={5}
                     placeholder="Card Payload"
                     className="form-control-monospace"
-                    disabled={!isAuthenticated}
+                    value={card} // Controlled component binding
+                    onChange={(e) => setCard(e.target.value)} // Update state on change
                 />
             </Form.Group>
             <Form.Group>
                 <Form.Label>Choose a destination for the card to be sent ({roomList.length})</Form.Label>
                 <Typeahead
-                    id="room-selector"
+                    id="room-selector"      // id is required for typeahead
                     options={roomList}
                     placeholder="Choose a room or person..."
                     labelKey="title"
-                    // minLength={2}       // characters typed before displaying dropdown
-                    selected={selected} // control the selected option
+                    // minLength={2}        // characters typed before displaying dropdown
+                    selected={selected}     // control the selected option
                     onChange={handleSelection} // triggered when an option is selected
                 />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="SearchText1">
-                <Form.Label>roomId</Form.Label>
-                <InputGroup>
-                    <Form.Control
-                        type="text"
-                        disabled={!isAuthenticated}
-                    />
-                </InputGroup>
-            </Form.Group>
-            <Button variant="primary" type="submit" disabled={!isAuthenticated}>Send</Button>
+            <Button variant="primary" type="submit" className="mt-3">Send</Button>
         </Form >
     );
 }

@@ -69,7 +69,7 @@ function App() {
               isAuthenticated ? 
                 <div>
                   <h1>Send a card</h1>
-                  <JsonForm isAuthenticated={isAuthenticated} roomList={roomList} />
+                  <JsonForm roomList={roomList} />
                 </div> : 
                 
                 <div>
