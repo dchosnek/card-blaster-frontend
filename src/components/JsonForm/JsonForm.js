@@ -1,8 +1,10 @@
+import React, { useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
+import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 import './JsonForm.css'; // Import the CSS file for additional styling
 
-
-function cardForm({ isAuthenticated }) {
+function cardForm({ isAuthenticated, roomList }) {
 
     const handleSubmit = (event) => {
         event.preventDefault(); // Prevent default form submission
@@ -36,6 +38,19 @@ function cardForm({ isAuthenticated }) {
           });
       };
 
+    // State to store the selected option
+    const [selected, setSelected] = useState([]);
+
+    // Handler to capture the selected item and log the ID
+    const handleSelection = (selectedOptions) => {
+        setSelected(selectedOptions);
+
+        if (selectedOptions.length > 0) {
+            const selectedOption = selectedOptions[0];
+            console.log('Selected ID:', selectedOption.id);
+        }
+    };
+
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="Textarea1">
@@ -48,12 +63,23 @@ function cardForm({ isAuthenticated }) {
                     disabled={!isAuthenticated}
                 />
             </Form.Group>
+            <Form.Group>
+                <Form.Label>Choose a destination for the card to be sent ({roomList.length})</Form.Label>
+                <Typeahead
+                    id="room-selector"
+                    options={roomList}
+                    placeholder="Choose a room or person..."
+                    labelKey="title"
+                    // minLength={2}       // characters typed before displaying dropdown
+                    selected={selected} // control the selected option
+                    onChange={handleSelection} // triggered when an option is selected
+                />
+            </Form.Group>
             <Form.Group className="mb-3" controlId="SearchText1">
-                <Form.Label>Choose the destination space for the card.</Form.Label>
+                <Form.Label>roomId</Form.Label>
                 <InputGroup>
                     <Form.Control
                         type="text"
-                        placeholder="destination..."
                         disabled={!isAuthenticated}
                     />
                 </InputGroup>
