@@ -73,7 +73,7 @@ function App() {
                 </div> : 
                 
                 <div>
-                  <h1>Welcome to Webex Blaster</h1>
+                  <h1>Welcome to Card Blaster for Webex</h1>
                   This is the app that will send Adaptive Cards in Webex on your behalf.
                   <hr width="100%" size="4" color="blue"></hr>
                   <p>Design your card using the Webex Adaptive Card <a href="https://developer.webex.com/buttons-and-cards-designer" target="_blank" rel="noreferrer">Designer</a>. You don't have to understand the JSON that the Designer creates. You just have to copy the JSON from the Designer and paste it into this site to send the card to a person or space in Webex.</p>

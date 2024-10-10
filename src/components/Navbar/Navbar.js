@@ -39,7 +39,7 @@ function Navbar({ isAuthenticated, avatarUrl, nickName, setShowRecentActivity })
 
                     {/* Brand Name */}
                     <BootstrapNavbar.Brand href="#home" className="ms-2">
-                        Webex Blaster
+                        Card Blaster for Webex
                     </BootstrapNavbar.Brand>
                 </div>
 
