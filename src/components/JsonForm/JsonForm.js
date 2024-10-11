@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import './JsonForm.css'; // Import the CSS file for additional styling
+const Joi = require('joi');
 
 function cardForm({ roomList }) {
 
@@ -13,6 +14,9 @@ function cardForm({ roomList }) {
 
     // State to store the selected room from typeahead
     const [selected, setSelected] = useState([]);
+
+    // State to track whether the card is valid JSON format
+    const [validJson, setValidJson] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();         // Prevent default form submission
@@ -52,8 +56,29 @@ function cardForm({ roomList }) {
             setRoomId(selectedOption.id);
             setRoomType(selectedOption.type);
             console.log(selectedOption.title, ':', selectedOption.id);
+        } else {
+            setRoomId('');
         }
     };
+
+    const schema = Joi.object({
+        $schema: Joi.string().uri().required(),
+        type: Joi.string().valid("AdaptiveCard").required(),
+        version: Joi.number().min(1.2).max(1.6).required(),
+        body: Joi.array().min(1).required()
+      });
+
+    useEffect(() => {
+        if (card) {
+            try {
+                const parsedCard = JSON.parse(card);
+                const { error } = schema.validate(parsedCard);
+                setValidJson(!error);
+            } catch (error) {
+                setValidJson(false);
+            }
+        }
+    }, [card])
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -66,6 +91,8 @@ function cardForm({ roomList }) {
                     className="form-control-monospace"
                     value={card} // Controlled component binding
                     onChange={(e) => setCard(e.target.value)} // Update state on change
+                    isInvalid={!validJson && card.length}   // highlight in red
+                    isValid={validJson && card.length}      // highlight in green
                 />
             </Form.Group>
             <Form.Group>
@@ -80,7 +107,7 @@ function cardForm({ roomList }) {
                     onChange={handleSelection} // triggered when an option is selected
                 />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mt-3">Send</Button>
+            <Button variant="primary" type="submit" className="mt-3" disabled={!validJson || !roomId.length}>Send</Button>
         </Form >
     );
 }
