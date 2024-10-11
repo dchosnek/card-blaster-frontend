@@ -39,13 +39,12 @@ function ActivityTable({show, setShow}) {
         })
         .then((mylist) => {
           setData(mylist);
-  
         })
     }
   }, [show]);
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal size="xl" show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Your recent activity</Modal.Title>
       </Modal.Header>
@@ -56,6 +55,7 @@ function ActivityTable({show, setShow}) {
             <tr>
               <th>Timestamp</th>
               <th>Activity</th>
+              <th>Type</th>
               <th>Result</th>
             </tr>
           </thead>
@@ -64,7 +64,9 @@ function ActivityTable({show, setShow}) {
               <tr key={index}>
                 <td>{formatDate(entry.timestamp)}</td>
                 <td>{entry.activity}</td>
-                <td>{entry.success ? "success" : ""}</td>
+                <td>{entry.type}</td>
+                {/* display success or failure only if that is a valid state */}
+                <td>{entry.success === undefined ? "" : entry.success ? "success" : "fail"}</td>
               </tr>
             ))}
           </tbody>
