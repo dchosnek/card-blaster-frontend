@@ -1,16 +1,10 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
-import './Footer.css';
 
 function Footer() {
   return (
-    <Container>
-      <footer className="footer bg-dark text-white mb-1 rounded px-4 d-flex flex-grow-1">
-        <Container className="d-flex justify-content-center">
-          Written and maintained by Doron Chosnek
-        </Container>
+      <footer className="bg-dark text-white rounded px-4 d-flex justify-content-center align-items-center py-3 mb-1">
+        Written and maintained by Doron Chosnek
       </footer>
-    </Container>
   );
 }
 

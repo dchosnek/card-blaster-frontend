@@ -54,7 +54,7 @@ function App() {
 
 
   return (
-    <div>
+    <div className="d-flex flex-column min-vh-100">
       {/* Navbar inside a Container */}
       <Container>
         {/* Navbar Component */}
@@ -62,7 +62,7 @@ function App() {
       </Container>
 
       {/* Main Container */}
-      <Container className="mt-4">
+      <Container className="flex-grow-1 mt-4">
         <Row className="justify-content-md-center">
           <Col md="8">
             {
