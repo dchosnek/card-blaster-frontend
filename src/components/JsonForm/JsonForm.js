@@ -96,7 +96,7 @@ function cardForm({ roomList }) {
                 />
             </Form.Group>
             <Form.Group>
-                <Form.Label>Choose a destination for the card to be sent ({roomList.length})</Form.Label>
+                <Form.Label>Choose a destination from these {roomList.length ? roomList.length : ""} rooms/spaces</Form.Label>
                 <Typeahead
                     id="room-selector"      // id is required for typeahead
                     options={roomList}
