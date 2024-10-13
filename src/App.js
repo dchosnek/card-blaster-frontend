@@ -18,7 +18,7 @@ function App() {
   // get list of rooms the user is currently in
   const fetchRooms = async () => {
     try {
-      const response = await fetch('/rooms', { credentials: 'include' });
+      const response = await fetch('/api/v1/user/rooms', { credentials: 'include' });
       const result = await response.json();
       setRoomList(result);
     } catch (error) {
@@ -28,7 +28,7 @@ function App() {
 
   // retrieve session data on page load
   useEffect(() => {
-    fetch('/status', {
+    fetch('/api/v1/user/details', {
       credentials: 'include',
     })
       .then((response) => {

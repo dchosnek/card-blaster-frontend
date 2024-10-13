@@ -5,12 +5,12 @@ import './Navbar.css';
 function Navbar({ isAuthenticated, avatarUrl, nickName, setShowRecentActivity }) {
 
     const handleLoginClick = () => {
-        window.location.href = 'http://localhost:3000/login';
+        window.location.href = 'http://localhost:3000/auth/login';
     };
 
     const handleLogoutClick = () => {
         // Make a request to the server-side /logout endpoint
-        fetch('/logout', { credentials: 'include' }) // Include credentials (cookies)
+        fetch('/auth/logout', { credentials: 'include' }) // Include credentials (cookies)
             .then((response) => {
                 if (response.redirected) {
                     // If the server responds with a redirect, navigate to that URL

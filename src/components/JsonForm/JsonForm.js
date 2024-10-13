@@ -22,7 +22,7 @@ function cardForm({ roomList }) {
         event.preventDefault();         // Prevent default form submission
 
         // Perform a POST request to /sendcard
-        fetch('/sendcard', {
+        fetch('/api/v1/card', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
