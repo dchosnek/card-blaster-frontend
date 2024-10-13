@@ -92,7 +92,6 @@ function App() {
                       <img src={`${process.env.PUBLIC_URL}/restaurant-card.png`} className="d-block mx-auto" border="1" />
                     </Carousel.Item>
                   </Carousel>
-                  <p>Howdy.</p>
                 </div>
             }
           </Col>
