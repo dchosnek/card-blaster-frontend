@@ -11,6 +11,7 @@ function cardForm({ roomList }) {
     const [roomId, setRoomId] = useState('');
     const [roomType, setRoomType] = useState('');
     const [card, setCard] = useState('');
+    const [messageId, setMessageId] = useState(null);
 
     // State to store the selected room from typeahead
     const [selected, setSelected] = useState([]);
@@ -21,7 +22,7 @@ function cardForm({ roomList }) {
     const handleSubmit = (event) => {
         event.preventDefault();         // Prevent default form submission
 
-        // Perform a POST request to /sendcard
+        // Perform a POST request to send the card
         fetch('/api/v1/card', {
             method: 'POST',
             headers: {
@@ -41,10 +42,27 @@ function cardForm({ roomList }) {
             })
             .then((data) => {
                 alert('Card sent successfully!');
+                setMessageId(data.id);
             })
             .catch((error) => {
                 alert('Failed to send the card.');
             });
+    };
+
+    // Perform a DELETE request to delete the card
+    const handleDelete = () => {
+        fetch(`/api/v1/card/${messageId}`, {method: 'DELETE'})
+        .then((response) => {
+            setMessageId(null);
+            if (response.ok) {
+                alert('Card deleted successfully!');
+            } else {
+                alert('Failed to delete card.');
+            }
+        })
+        .catch((error) => {
+            alert('Failed to delete card:', error);
+        })
     };
 
     // Handler to capture the selected typeahead item and set roomId
@@ -64,9 +82,10 @@ function cardForm({ roomList }) {
     const schema = Joi.object({
         $schema: Joi.string().uri().required(),
         type: Joi.string().valid("AdaptiveCard").required(),
-        version: Joi.number().min(1.2).max(1.6).required(),
-        body: Joi.array().min(1).required()
-      });
+        version: Joi.number().min(1.2).max(1.3).required(),
+        body: Joi.array().min(1).required(),
+        actions: Joi.array().optional(),
+      });       // can add .unknown(true) here to allow for more fields
 
     useEffect(() => {
         if (card) {
@@ -107,7 +126,8 @@ function cardForm({ roomList }) {
                     onChange={handleSelection} // triggered when an option is selected
                 />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mt-3" disabled={!validJson || !roomId.length}>Send</Button>
+            <Button variant={validJson && roomId.length ? "outline-primary" : "outline-secondary" } size="lg" type="submit" className="mt-3" disabled={!validJson || !roomId.length}>Send</Button>
+            <Button variant="outline-danger" size="lg" className="mt-3 mx-3" hidden={messageId === null} onClick={handleDelete}>Undo Send</Button>
         </Form >
     );
 }
