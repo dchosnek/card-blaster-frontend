@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Carousel, Container, Row, Col } from 'react-bootstrap';
+import { Carousel, Container, Row, Col, Card, Button } from 'react-bootstrap';
 import JsonForm from './components/JsonForm/JsonForm';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
@@ -66,27 +66,52 @@ function App() {
         <Row className="justify-content-md-center">
           <Col md="8">
             {
-              isAuthenticated ? 
+              isAuthenticated ?
                 <div>
                   <h1>Send a card</h1>
                   <JsonForm roomList={roomList} />
-                </div> : 
-                
+                </div> :
+
                 <div>
                   <h1>Welcome to Card Blaster for Webex</h1>
                   This is the app that will send Adaptive Cards in Webex on your behalf.
                   <hr width="100%" size="4" color="blue"></hr>
-                  <p><b>Step 1: </b>Design your card using the Webex Adaptive Card <a href="https://developer.webex.com/buttons-and-cards-designer" target="_blank" rel="noreferrer">Designer</a>. You don't have to understand the JSON that the Designer creates. You just have to copy the JSON from the Designer and paste it into Card Blaster.</p>
-                  <p><b>Step 2: </b>Paste the contents from the designer into this tool and choose the Webex room/space to send it to. You can send cards to individuals or group spaces.</p>
-                  <Carousel interval="1500">
+
+                  <Row><Col>
+                    <Card className="h-100">
+                      <Card.Header className="bg-info py-3 fw-bold">Step 1</Card.Header>
+                      <Card.Body>
+                        Design your card using the Webex Adaptive Card Designer. 
+                        You don't have to <b>understand</b> the JSON that the Designer creates. 
+                        You just have to paste it into Card Blaster!
+                      </Card.Body>
+                      <Card.Footer className="d-flex justify-content-end">
+                        <Button variant="outline-primary" href="https://developer.webex.com/buttons-and-cards-designer" target="_blank">Open Designer</Button>
+                      </Card.Footer>
+                    </Card>
+                  </Col>
+                    <Col>
+                      <Card className="h-100">
+                        <Card.Header className="bg-info py-3 fw-bold">Step 2</Card.Header>
+                        <Card.Body>
+                          Paste the contents from the Designer into this tool and choose the Webex room/space to send it to. You can send cards to individuals or group spaces!
+                        </Card.Body>
+                        <Card.Footer className="d-flex justify-content-end">
+                          <Button variant="outline-primary">Login to Card Blaster</Button>
+                        </Card.Footer>
+                      </Card>
+                    </Col>
+                  </Row>
+
+                  <Carousel className="pt-5" interval="1500">
                     <Carousel.Item>
-                      <img src={`${process.env.PUBLIC_URL}/blaster-card.png`} className="d-block mx-auto" border="1"/>
+                      <img src={`${process.env.PUBLIC_URL}/blaster-card.png`} className="d-block mx-auto" border="1" />
                     </Carousel.Item>
                     <Carousel.Item>
-                      <img src={`${process.env.PUBLIC_URL}/weather-card.png`} className="d-block mx-auto" border="1" />
+                      <img src={`${process.env.PUBLIC_URL}/weather-card.png`} className="d-block mx-auto" />
                     </Carousel.Item>
                     <Carousel.Item>
-                      <img src={`${process.env.PUBLIC_URL}/webinar-card-light.png`} className="d-block mx-auto" border="1" />
+                      <img src={`${process.env.PUBLIC_URL}/webinar-card-light.png`} className="d-block mx-auto" />
                     </Carousel.Item>
                     <Carousel.Item>
                       <img src={`${process.env.PUBLIC_URL}/restaurant-card.png`} className="d-block mx-auto" border="1" />
@@ -98,7 +123,7 @@ function App() {
         </Row>
       </Container>
       <Container>
-      <ActivityTable show={showRecentActivity} setShow={setShowRecentActivity} />
+        <ActivityTable show={showRecentActivity} setShow={setShowRecentActivity} />
       </Container>
       {/* Footer at the bottom */}
       <Container>
