@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Table } from 'react-bootstrap';
+import './ActivityTable.css'
 
-function ActivityTable({show, setShow}) {
+function ActivityTable({ show, setShow }) {
 
   // convert the timestamp to local timezone and format it
   const formatDate = (timestamp) => {
@@ -17,6 +18,20 @@ function ActivityTable({show, setShow}) {
       second: '2-digit',
       hour12: true // use AM/PM
     });
+  };
+
+  // Function to split a string in half
+  const splitStringInHalf = (str) => {
+    let firstHalf, secondHalf;
+    if (str) {
+      const middleIndex = Math.floor(str.length / 2);
+      firstHalf = str.substring(0, middleIndex);
+      secondHalf = str.substring(middleIndex);
+    } else {
+      firstHalf = null;
+      secondHalf = null;
+    }
+    return { firstHalf, secondHalf };
   };
 
   // data is the list of maps to display in the table
@@ -53,22 +68,33 @@ function ActivityTable({show, setShow}) {
         <Table striped hover className="mt-4">
           <thead>
             <tr>
-              <th>Timestamp</th>
-              <th>Activity</th>
-              <th>Type</th>
-              <th>Result</th>
+              <th className="nowrap-column">Timestamp</th>
+              <th className="nowrap-column">Activity</th>
+              <th className="nowrap-column">Type</th>
+              <th className="nowrap-column">Result</th>
+              <th className="wrap-column">Message Id</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((entry, index) => (
-              <tr key={index}>
-                <td>{formatDate(entry.timestamp)}</td>
-                <td>{entry.activity}</td>
-                <td>{entry.type}</td>
-                {/* display success or failure only if that is a valid state */}
-                <td>{entry.success === undefined ? "" : entry.success ? "success" : "fail"}</td>
-              </tr>
-            ))}
+            {data.map((entry, index) => {
+              const splitMessage = splitStringInHalf(entry.messageId);
+              return (
+                <tr key={index}>
+                  <td className="nowrap-column">{formatDate(entry.timestamp)}</td>
+                  <td className="nowrap-column">{entry.activity}</td>
+                  <td className="nowrap-column">{entry.type}</td>
+                  {/* display success or failure only if that is a valid state */}
+                  <td className="nowrap-column">{entry.success === undefined ? "" : entry.success ? "success" : "fail"}</td>
+                  {/* display messageId split in half so as to make the table readable */}
+                  <td>
+                    <span className="split-text">
+                      {splitMessage.firstHalf}
+                    </span>
+                    {splitMessage.secondHalf}
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </Table>
       </Modal.Body>
