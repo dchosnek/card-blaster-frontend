@@ -5,6 +5,8 @@ import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import ActivityTable from './components/ActivityTable/ActivityTable';
 
+import './App.css';
+
 function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -14,6 +16,11 @@ function App() {
   const [nickName, setNickName] = useState('');
   const [roomList, setRoomList] = useState([]);
   const [showRecentActivity, setShowRecentActivity] = useState(false);
+
+  // duplicate of the handler in navbar... TODO: consolidate
+  const handleLoginClick = () => {
+    window.location.href = 'http://localhost:3000/auth/login';
+  };
 
   // get list of rooms the user is currently in
   const fetchRooms = async () => {
@@ -79,10 +86,10 @@ function App() {
 
                   <Row><Col>
                     <Card className="h-100">
-                      <Card.Header className="bg-info py-3 fw-bold">Step 1</Card.Header>
+                      <Card.Header className="muted-primary py-3 fw-bold">Step 1</Card.Header>
                       <Card.Body>
-                        Design your card using the Webex Adaptive Card Designer. 
-                        You don't have to <b>understand</b> the JSON that the Designer creates. 
+                        Design your card using the Webex Adaptive Card Designer.
+                        You don't have to <b>understand</b> the JSON that the Designer creates.
                         You just have to paste it into Card Blaster!
                       </Card.Body>
                       <Card.Footer className="d-flex justify-content-end">
@@ -92,31 +99,16 @@ function App() {
                   </Col>
                     <Col>
                       <Card className="h-100">
-                        <Card.Header className="bg-info py-3 fw-bold">Step 2</Card.Header>
+                        <Card.Header className="muted-primary py-3 fw-bold">Step 2</Card.Header>
                         <Card.Body>
                           Paste the contents from the Designer into this tool and choose the Webex room/space to send it to. You can send cards to individuals or group spaces!
                         </Card.Body>
                         <Card.Footer className="d-flex justify-content-end">
-                          <Button variant="outline-primary">Login to Card Blaster</Button>
+                          <Button variant="outline-primary" onClick={handleLoginClick}>Login to Card Blaster</Button>
                         </Card.Footer>
                       </Card>
                     </Col>
                   </Row>
-
-                  <Carousel className="pt-5" interval="1500">
-                    <Carousel.Item>
-                      <img src={`${process.env.PUBLIC_URL}/blaster-card.png`} className="d-block mx-auto" border="1" />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                      <img src={`${process.env.PUBLIC_URL}/weather-card.png`} className="d-block mx-auto" />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                      <img src={`${process.env.PUBLIC_URL}/webinar-card-light.png`} className="d-block mx-auto" />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                      <img src={`${process.env.PUBLIC_URL}/restaurant-card.png`} className="d-block mx-auto" border="1" />
-                    </Carousel.Item>
-                  </Carousel>
                 </div>
             }
           </Col>
