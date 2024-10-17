@@ -1,0 +1,16 @@
+.wrap-column {
+    white-space: normal;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.nowrap-column {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.split-text::after {
+    content: "";
+    display: block;
+  }
