@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import './JsonForm.css'; // Import the CSS file for additional styling
+import ToastManager from '../ToastManager';
 const Joi = require('joi');
 
 function cardForm({ roomList }) {
+    const toastRef = useRef(); // Create a ref to access ToastManager's methods
 
     // State variables for each form field
     const [roomId, setRoomId] = useState('');
@@ -41,11 +43,11 @@ function cardForm({ roomList }) {
                 return response.json();
             })
             .then((data) => {
-                alert('Card sent successfully!');
+                toastRef.current.addToast('Send Card', 'Card sent successfully!', 'success');
                 setMessageId(data.id);
             })
             .catch((error) => {
-                alert('Failed to send the card.');
+                toastRef.current.addToast('Send Card', 'Card failed to send!', 'danger');
             });
     };
 
@@ -55,13 +57,13 @@ function cardForm({ roomList }) {
         .then((response) => {
             setMessageId(null);
             if (response.ok) {
-                alert('Card deleted successfully!');
+                toastRef.current.addToast('Card Delete', 'Card deleted successfully!', 'success');
             } else {
-                alert('Failed to delete card.');
+                toastRef.current.addToast('Card Delete', 'Failed to delete card!', 'danger');
             }
         })
         .catch((error) => {
-            alert('Failed to delete card:', error);
+            toastRef.current.addToast('Card Delete', `Failed to delete card! ${error}`, 'danger');
         })
     };
 
@@ -100,6 +102,7 @@ function cardForm({ roomList }) {
     }, [card])
 
     return (
+        <div>
         <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="Textarea1">
                 <Form.Label>Enter your adaptive card payload below. Use the Webex Adaptive Card <a href="https://developer.webex.com/buttons-and-cards-designer" target="_blank" rel="noreferrer">Designer</a> to create your card.</Form.Label>
@@ -129,6 +132,8 @@ function cardForm({ roomList }) {
             <Button variant={validJson && roomId.length ? "outline-primary" : "outline-secondary" } size="lg" type="submit" className="mt-3" disabled={!validJson || !roomId.length}>Send</Button>
             <Button variant="outline-danger" size="lg" className="mt-3 mx-3" hidden={messageId === null} onClick={handleDelete}>Undo Send</Button>
         </Form >
+        <ToastManager ref={toastRef} />
+        </div>
     );
 }
 
