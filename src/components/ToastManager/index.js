@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Toast, ToastContainer } from 'react-bootstrap';
+import { CheckCircleFill, ExclamationCircleFill } from 'react-bootstrap-icons';
 
 // Wrap ToastManager with forwardRef
 const ToastManager = forwardRef((props, ref) => {
@@ -11,8 +12,10 @@ const ToastManager = forwardRef((props, ref) => {
   }));
 
   // Add a toast to the state
-  function addToast(operation, message, variant = 'secondary') {
-    const newToast = { id: Date.now(), operation, message, variant };
+  function addToast(message, success) {
+    const variant = success ? "success" : "danger";
+    const title = success ? "Success" : "Error";
+    const newToast = { id: Date.now(), message, variant, title };
     setToasts([...toasts, newToast]);
 
     // Automatically remove the toast after 5 seconds
@@ -25,14 +28,16 @@ const ToastManager = forwardRef((props, ref) => {
   }
 
   return (
-    <ToastContainer position="top-end" className="p-3">
+    <ToastContainer className="p-5 position-fixed top-0 start-50 translate-middle-x">
       {toasts.map((toast) => (
         <Toast className={`bg-${toast.variant} text-white`} key={toast.id} onClose={() => removeToast(toast.id)}>
           <Toast.Header closeButton={true}>
-            <strong className="me-auto">{toast.operation}</strong>
+          <CheckCircleFill hidden={toast.variant !== 'success'} className='me-2' />
+          <ExclamationCircleFill hidden={toast.variant !== 'danger'} className='me-2' />
+            <strong className="me-auto">{toast.title}</strong>
             <small>Just now</small>
           </Toast.Header>
-          <Toast.Body>{toast.message}</Toast.Body>
+          <Toast.Body className="bg-light text-black">{toast.message}</Toast.Body>
         </Toast>
       ))}
     </ToastContainer>

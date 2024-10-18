@@ -43,11 +43,11 @@ function cardForm({ roomList }) {
                 return response.json();
             })
             .then((data) => {
-                toastRef.current.addToast('Send Card', 'Card sent successfully!', 'success');
+                toastRef.current.addToast('Card sent successfully!', true);
                 setMessageId(data.id);
             })
             .catch((error) => {
-                toastRef.current.addToast('Send Card', 'Card failed to send!', 'danger');
+                toastRef.current.addToast(`Failed to delete card! ${error}`, false);
             });
     };
 
@@ -57,13 +57,13 @@ function cardForm({ roomList }) {
         .then((response) => {
             setMessageId(null);
             if (response.ok) {
-                toastRef.current.addToast('Card Delete', 'Card deleted successfully!', 'success');
+                toastRef.current.addToast('Card deleted successfully!', true);
             } else {
-                toastRef.current.addToast('Card Delete', 'Failed to delete card!', 'danger');
+                toastRef.current.addToast('Failed to delete card!', false);
             }
         })
         .catch((error) => {
-            toastRef.current.addToast('Card Delete', `Failed to delete card! ${error}`, 'danger');
+            toastRef.current.addToast(`Failed to delete card! ${error}`, false);
         })
     };
 
