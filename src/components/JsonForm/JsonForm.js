@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form, InputGroup } from 'react-bootstrap';
+import { Button, Form, Spinner } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import './JsonForm.css'; // Import the CSS file for additional styling
@@ -14,6 +14,7 @@ function cardForm({ roomList }) {
     const [roomType, setRoomType] = useState('');
     const [card, setCard] = useState('');
     const [messageId, setMessageId] = useState(null);
+    const [hideSubmit, setHideSubmit] = useState(false);
 
     // State to store the selected room from typeahead
     const [selected, setSelected] = useState([]);
@@ -23,6 +24,8 @@ function cardForm({ roomList }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();         // Prevent default form submission
+        
+        setHideSubmit(true);
 
         // Perform a POST request to send the card
         fetch('/api/v1/card', {
@@ -43,11 +46,14 @@ function cardForm({ roomList }) {
                 return response.json();
             })
             .then((data) => {
-                toastRef.current.addToast('Card sent successfully!', true);
+                const roomName = selected[0].title;
+                toastRef.current.addToast(`Card sent successfully to ${roomName}.`, true);
                 setMessageId(data.id);
+                setHideSubmit(false);
             })
             .catch((error) => {
-                toastRef.current.addToast(`Failed to delete card! ${error}`, false);
+                toastRef.current.addToast(`Failed to send card! ${error}`, false);
+                setHideSubmit(false);
             });
     };
 
@@ -75,7 +81,6 @@ function cardForm({ roomList }) {
             const selectedOption = selectedRoom[0];
             setRoomId(selectedOption.id);
             setRoomType(selectedOption.type);
-            console.log(selectedOption.title, ':', selectedOption.id);
         } else {
             setRoomId('');
         }
@@ -122,14 +127,27 @@ function cardForm({ roomList }) {
                 <Typeahead
                     id="room-selector"      // id is required for typeahead
                     options={roomList}
-                    placeholder="Choose a room or person..."
+                    placeholder="Choose a room or person (start typing)..."
                     labelKey="title"
-                    // minLength={2}        // characters typed before displaying dropdown
+                    minLength={1}           // characters typed before displaying dropdown
                     selected={selected}     // control the selected option
                     onChange={handleSelection} // triggered when an option is selected
                 />
             </Form.Group>
-            <Button variant={validJson && roomId.length ? "outline-primary" : "outline-secondary" } size="lg" type="submit" className="mt-3" disabled={!validJson || !roomId.length}>Send</Button>
+            <Button 
+                variant={validJson && roomId.length ? "outline-primary" : "outline-secondary" } 
+                size="lg" 
+                type="submit" 
+                className="mt-3" 
+                disabled={!validJson || !roomId.length || hideSubmit}>
+                    {
+                        hideSubmit ? (
+                            <Spinner animation="border" role="status" aria-hidden="true"/>
+                        ) : (
+                            'Submit'
+                        )
+                    }
+                </Button>
             <Button variant="outline-danger" size="lg" className="mt-3 mx-3" hidden={messageId === null} onClick={handleDelete}>Undo Send</Button>
         </Form >
         <ToastManager ref={toastRef} />
