@@ -17,7 +17,7 @@ function App() {
   const [roomList, setRoomList] = useState([]);
   const [showRecentActivity, setShowRecentActivity] = useState(false);
 
-  // duplicate of the handler in navbar... TODO: consolidate
+  // handler shared with navbar component
   const handleLoginClick = () => {
     const loginUrl =
       process.env.NODE_ENV === 'development'
