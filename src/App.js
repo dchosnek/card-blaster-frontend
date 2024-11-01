@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Carousel, Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import JsonForm from './components/JsonForm/JsonForm';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
@@ -19,7 +19,11 @@ function App() {
 
   // duplicate of the handler in navbar... TODO: consolidate
   const handleLoginClick = () => {
-    window.location.href = 'http://localhost:3000/auth/login';
+    const loginUrl =
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000/auth/login'
+        : '/auth/login';
+    window.location.href = loginUrl;
   };
 
   // get list of rooms the user is currently in
@@ -65,7 +69,7 @@ function App() {
       {/* Navbar inside a Container */}
       <Container>
         {/* Navbar Component */}
-        <Navbar isAuthenticated={isAuthenticated} avatarUrl={avatarUrl} nickName={nickName} setShowRecentActivity={setShowRecentActivity} />
+        <Navbar isAuthenticated={isAuthenticated} avatarUrl={avatarUrl} nickName={nickName} setShowRecentActivity={setShowRecentActivity} handleLoginClick={handleLoginClick} />
       </Container>
 
       {/* Main Container */}

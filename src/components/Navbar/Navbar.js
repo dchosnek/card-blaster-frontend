@@ -1,12 +1,8 @@
 import React from 'react';
-import { Navbar as BootstrapNavbar, Container, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Navbar as BootstrapNavbar, Container, Dropdown } from 'react-bootstrap';
 import './Navbar.css'; 
 
-function Navbar({ isAuthenticated, avatarUrl, nickName, setShowRecentActivity }) {
-
-    const handleLoginClick = () => {
-        window.location.href = 'http://localhost:3000/auth/login';
-    };
+function Navbar({ isAuthenticated, avatarUrl, nickName, setShowRecentActivity, handleLoginClick }) {
 
     const handleLogoutClick = () => {
         // Make a request to the server-side /logout endpoint
