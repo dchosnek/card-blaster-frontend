@@ -1,19 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import './JsonForm.css'; // Import the CSS file for additional styling
-import ToastManager from '../ToastManager';
 const Joi = require('joi');
 
-function cardForm({ roomList }) {
-    const toastRef = useRef(); // Create a ref to access ToastManager's methods
+function cardForm({ roomList, sendAlert }) {
 
     // State variables for each form field
     const [roomId, setRoomId] = useState('');
     const [roomType, setRoomType] = useState('');
     const [card, setCard] = useState('');
-    const [messageId, setMessageId] = useState(null);
     const [hideSubmit, setHideSubmit] = useState(false);
 
     // State to store the selected room from typeahead
@@ -37,6 +34,8 @@ function cardForm({ roomList }) {
                 roomId: roomId,         // Set the "roomId" field in the payload
                 card: JSON.parse(card), // Convert the card payload string to an object
                 type: roomType,
+                roomTitle: selected[0].title,
+                roomId: roomId,
             }),
         })
             .then((response) => {
@@ -47,30 +46,13 @@ function cardForm({ roomList }) {
             })
             .then((data) => {
                 const roomName = selected[0].title;
-                toastRef.current.addToast(`Card sent successfully to ${roomName}.`, true);
-                setMessageId(data.id);
+                sendAlert(`Card sent successfully to ${roomName}.`, true);
                 setHideSubmit(false);
             })
             .catch((error) => {
-                toastRef.current.addToast(`Failed to send card! ${error}`, false);
+                sendAlert(`Failed to send card! ${error}`, false);
                 setHideSubmit(false);
             });
-    };
-
-    // Perform a DELETE request to delete the card
-    const handleDelete = () => {
-        fetch(`/api/v1/card/${messageId}`, {method: 'DELETE'})
-        .then((response) => {
-            setMessageId(null);
-            if (response.ok) {
-                toastRef.current.addToast('Card deleted successfully!', true);
-            } else {
-                toastRef.current.addToast('Failed to delete card!', false);
-            }
-        })
-        .catch((error) => {
-            toastRef.current.addToast(`Failed to delete card! ${error}`, false);
-        })
     };
 
     // Handler to capture the selected typeahead item and set roomId
@@ -123,7 +105,7 @@ function cardForm({ roomList }) {
                 />
             </Form.Group>
             <Form.Group>
-                <Form.Label>Choose a destination from these {roomList.length ? roomList.length : ""} rooms/spaces</Form.Label>
+                <Form.Label>Choose a recipient from these {roomList.length ? roomList.length : ""} rooms/spaces</Form.Label>
                 <Typeahead
                     id="room-selector"      // id is required for typeahead
                     options={roomList}
@@ -147,10 +129,8 @@ function cardForm({ roomList }) {
                             'Submit'
                         )
                     }
-                </Button>
-            <Button variant="outline-danger" size="lg" className="mt-3 mx-3" hidden={messageId === null} onClick={handleDelete}>Undo Send</Button>
+            </Button>
         </Form >
-        <ToastManager ref={toastRef} />
         </div>
     );
 }
