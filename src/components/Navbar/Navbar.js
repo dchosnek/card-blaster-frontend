@@ -6,7 +6,7 @@ function Navbar({ isAuthenticated, avatarUrl, nickName, setShowRecentActivity, h
 
     const handleLogoutClick = () => {
         // Make a request to the server-side /logout endpoint
-        fetch('/auth/logout', { credentials: 'include' }) // Include credentials (cookies)
+        fetch('auth/logout', { credentials: 'include' }) // Include credentials (cookies)
             .then((response) => {
                 if (response.redirected) {
                     // If the server responds with a redirect, navigate to that URL

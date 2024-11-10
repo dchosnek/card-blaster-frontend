@@ -25,7 +25,7 @@ function cardForm({ roomList, sendAlert }) {
         setHideSubmit(true);
 
         // Perform a POST request to send the card
-        fetch('/api/v1/card', {
+        fetch('api/v1/card', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

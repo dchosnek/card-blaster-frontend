@@ -16,7 +16,7 @@ function ActivityTable({ show, setShow }) {
   useEffect(() => {
     // only retrieve history on show = true
     if (show) {
-      fetch('/api/v1/user/history', {
+      fetch('api/v1/user/history', {
         credentials: 'include',
       })
         .then((response) => {

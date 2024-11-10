@@ -7,7 +7,7 @@ function ActivityRow({ entry, deletedMessages, setDeletedMessages }) {
 
     // Perform a DELETE request to delete the card
     const handleDelete = (messageId) => {
-        fetch(`/api/v1/card/${messageId}`, {method: 'DELETE'})
+        fetch(`api/v1/card/${messageId}`, {method: 'DELETE'})
         .then((response) => {
             if (response.ok) {
                 setDeletedMessages([...deletedMessages, messageId]);
