@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import JsonForm from './components/JsonForm/JsonForm';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import ActivityTable from './components/ActivityTable/ActivityTable';
+import ToastManager from './components/ToastManager';
 
 import './App.css';
 
 function App() {
+
+  const toastRef = useRef(); // Create a ref to access ToastManager's methods
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -22,7 +25,7 @@ function App() {
     const loginUrl =
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:3000/auth/login'
-        : '/auth/login';
+        : 'auth/login';
     window.location.href = loginUrl;
   };
 
@@ -80,7 +83,7 @@ function App() {
               isAuthenticated ?
                 <div>
                   <h1>Send a card</h1>
-                  <JsonForm roomList={roomList} />
+                  <JsonForm roomList={roomList} sendAlert={(msg,success) => toastRef.current.addToast(msg,success)}/>
                 </div> :
 
                 <div>
@@ -120,6 +123,9 @@ function App() {
       </Container>
       <Container>
         <ActivityTable show={showRecentActivity} setShow={setShowRecentActivity} />
+      </Container>
+      <Container>
+      <ToastManager ref={toastRef} />
       </Container>
       {/* Footer at the bottom */}
       <Container>
