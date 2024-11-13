@@ -122,7 +122,7 @@ function App() {
         </Row>
       </Container>
       <Container>
-        <ActivityTable show={showRecentActivity} setShow={setShowRecentActivity} />
+        <ActivityTable show={showRecentActivity} setShow={setShowRecentActivity} sendAlert={(msg,success) => toastRef.current.addToast(msg,success)}/>
       </Container>
       <Container>
       <ToastManager ref={toastRef} />
