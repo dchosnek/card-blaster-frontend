@@ -28,7 +28,7 @@ const ToastManager = forwardRef((props, ref) => {
   }
 
   return (
-    <ToastContainer className="p-5 position-fixed top-0 start-50 translate-middle-x">
+    <ToastContainer className="p-5 position-fixed top-0 end-0">
       {toasts.map((toast) => (
         <Toast className={`bg-${toast.variant} text-white`} key={toast.id} onClose={() => removeToast(toast.id)}>
           <Toast.Header closeButton={true}>
