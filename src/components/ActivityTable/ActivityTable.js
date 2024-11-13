@@ -3,7 +3,7 @@ import { Modal, Table } from 'react-bootstrap';
 import ActivityRow from '../ActivityRow/ActivityRow';
 import './ActivityTable.css'
 
-function ActivityTable({ show, setShow }) {
+function ActivityTable({ show, setShow, sendAlert }) {
 
   // history is the list of maps to display in the table
   const [history, setHistory] = useState([]);
@@ -13,23 +13,27 @@ function ActivityTable({ show, setShow }) {
   // change the state of the the visibility of the modal
   const handleClose = () => setShow(false);
 
+  const fetchHistory = () => {
+    fetch('api/v1/user/history', {
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return null;
+      })
+      .then((mylist) => {
+        setHistory(mylist);
+        // create list containing messageId for deleted messages
+        setDeletedMessages(mylist.filter(x => x.activity==='delete card').map(y => y.messageId));
+      })
+  }
+
   useEffect(() => {
     // only retrieve history on show = true
     if (show) {
-      fetch('api/v1/user/history', {
-        credentials: 'include',
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          }
-          return null;
-        })
-        .then((mylist) => {
-          setHistory(mylist);
-          // create list containing messageId for deleted messages
-          setDeletedMessages(mylist.filter(x => x.activity==='delete card').map(y => y.messageId));
-        })
+      fetchHistory();
     }
   }, [show]);
 
@@ -52,7 +56,7 @@ function ActivityTable({ show, setShow }) {
           <tbody>
             {history.map((entry, index) => {
               return (
-                <ActivityRow key={index} entry={entry} deletedMessages={deletedMessages} setDeletedMessages={setDeletedMessages}/>
+                <ActivityRow key={index} entry={entry} deletedMessages={deletedMessages} sendAlert={sendAlert} fetchHistory={fetchHistory}/>
               )
             })}
           </tbody>

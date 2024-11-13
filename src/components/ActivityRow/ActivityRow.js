@@ -1,24 +1,30 @@
-import React, { useRef } from 'react';
-import { Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Spinner } from 'react-bootstrap';
 import { ExclamationTriangle, Person, People, Trash } from 'react-bootstrap-icons';
 import './ActivityRow.css';
 
-function ActivityRow({ entry, deletedMessages, setDeletedMessages }) {
+function ActivityRow({ entry, deletedMessages, sendAlert, fetchHistory }) {
+
+    const [deleteDisabled, setDeleteDisabled] = useState(false);
 
     // Perform a DELETE request to delete the card
     const handleDelete = (messageId) => {
+        setDeleteDisabled(true);    // disable delete button so it can't be pressed again
         fetch(`api/v1/card/${messageId}`, {method: 'DELETE'})
         .then((response) => {
             if (response.ok) {
-                setDeletedMessages([...deletedMessages, messageId]);
-                toastRef.current.addToast('Card deleted successfully!', true);
+                sendAlert('Card deleted successfully!', true);
             } else {
-                toastRef.current.addToast('Failed to delete card!', false);
+                sendAlert('Failed to delete card!', false);
             }
+            fetchHistory();     // refresh the activity table
+            setDeleteDisabled(false);
         })
         .catch((error) => {
             console.log(error);
-            // toastRef.current.addToast(`Failed to delete card! ${error}`, false);
+            sendAlert(`Failed to delete card! ${error}`, false);
+            fetchHistory();     // refresh the activity table
+            setDeleteDisabled(false);
         })
     };
 
@@ -61,7 +67,15 @@ function ActivityRow({ entry, deletedMessages, setDeletedMessages }) {
             <td className="nowrap-column">
                 {entry.activity === 'send card' && entry.success && !deletedMessages.includes(entry.messageId) 
                     ? 
-                <Button variant="outline-danger" size="sm" onClick={() => handleDelete(entry.messageId)}><Trash /></Button> 
+                // delete button displayed only when row is for a sent card that has not already been deleted
+                // show either trash can or spinner based on whether the button is disabled
+                <Button 
+                    variant="outline-danger" 
+                    size="sm" 
+                    disabled={deleteDisabled}
+                    onClick={() => handleDelete(entry.messageId)}>
+                        { deleteDisabled ? (<Spinner animation="border" size="sm"/>) : (<Trash />)}
+                </Button> 
                     : 
                 ""}
             </td>
