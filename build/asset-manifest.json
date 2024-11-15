@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/cardblaster/static/css/main.ed92c1bf.css",
-    "main.js": "/cardblaster/static/js/main.f3215472.js",
+    "main.js": "/cardblaster/static/js/main.a90cdb0d.js",
     "static/js/453.a222c209.chunk.js": "/cardblaster/static/js/453.a222c209.chunk.js",
     "index.html": "/cardblaster/index.html",
     "main.ed92c1bf.css.map": "/cardblaster/static/css/main.ed92c1bf.css.map",
-    "main.f3215472.js.map": "/cardblaster/static/js/main.f3215472.js.map",
+    "main.a90cdb0d.js.map": "/cardblaster/static/js/main.a90cdb0d.js.map",
     "453.a222c209.chunk.js.map": "/cardblaster/static/js/453.a222c209.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ed92c1bf.css",
-    "static/js/main.f3215472.js"
+    "static/js/main.a90cdb0d.js"
   ]
 }
