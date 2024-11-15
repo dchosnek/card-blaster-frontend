@@ -16,7 +16,12 @@ const ToastManager = forwardRef((props, ref) => {
     const variant = success ? "success" : "danger";
     const title = success ? "Success" : "Error";
     const newToast = { id: Date.now(), message, variant, title };
-    setToasts([...toasts, newToast]);
+    // Use functional form of setToasts to ensure state consistency
+    // React’s useState hook allows you to update the state using a function 
+    // rather than directly passing the new state value. Automatically passes 
+    // the most up-to-date value of the state (currentToasts) to the function 
+    // as its argument.
+    setToasts((currentToasts) => [...currentToasts, newToast]);
 
     // Automatically remove the toast after 5 seconds
     setTimeout(() => removeToast(newToast.id), 5000);
