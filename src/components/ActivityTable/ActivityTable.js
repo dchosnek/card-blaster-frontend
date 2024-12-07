@@ -14,14 +14,16 @@ function ActivityTable({ show, setShow, sendAlert }) {
   const handleClose = () => setShow(false);
 
   const fetchHistory = () => {
-    fetch('api/v1/user/history', {
+    fetch('api/v1/card', {
       credentials: 'include',
     })
       .then((response) => {
         if (response.status === 200) {
           return response.json();
+        } else {
+          sendAlert('Error attempting to get list of sent cards. Try refreshing your browser.', false);
+          return [];
         }
-        return null;
       })
       .then((mylist) => {
         setHistory(mylist);
@@ -40,11 +42,13 @@ function ActivityTable({ show, setShow, sendAlert }) {
   return (
     <Modal size="xl" show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Your recent activity</Modal.Title>
+        <Modal.Title>Your sent and deleted cards</Modal.Title>
       </Modal.Header>
       <Modal.Body>
 
-        <Table striped hover className="mt-4">
+        <p hidden={history.length}>You have not sent any cards yet.</p>
+
+        <Table striped hover className="mt-4" hidden={!history.length}>
           <thead>
             <tr>
               <th className="nowrap-column">Timestamp</th>

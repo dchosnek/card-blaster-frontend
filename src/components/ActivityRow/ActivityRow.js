@@ -21,7 +21,6 @@ function ActivityRow({ entry, deletedMessages, sendAlert, fetchHistory }) {
             setDeleteDisabled(false);
         })
         .catch((error) => {
-            console.log(error);
             sendAlert(`Failed to delete card! ${error}`, false);
             fetchHistory();     // refresh the activity table
             setDeleteDisabled(false);

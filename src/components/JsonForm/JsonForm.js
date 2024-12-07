@@ -33,9 +33,11 @@ function cardForm({ roomList, sendAlert }) {
                     roomTitle: room.title,
                 }),
             })
-                .then((response) => {
+                .then(async (response) => {
                     if (!response.ok) {
-                        throw new Error('Failed to send card.');
+                        const errorData = await response.json();
+                        const error = new Error(errorData.message || 'Unknown error occurred');
+                        throw error;
                     }
                     return response.json();
                 })
@@ -45,7 +47,6 @@ function cardForm({ roomList, sendAlert }) {
                 })
                 .catch((error) => {
                     sendAlert(`Failed to send card to ${room.title}! ${error}`, false);
-                    console.error(`Failed to send card to ${room.title}! ${error}`);
                     resolve();  // resolve the promise without returning any data
                 })
         );
