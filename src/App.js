@@ -4,6 +4,7 @@ import JsonForm from './components/JsonForm/JsonForm';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import ActivityTable from './components/ActivityTable/ActivityTable';
+import ImageTable from './components/ImageTable';
 import ToastManager from './components/ToastManager';
 
 import './App.css';
@@ -19,6 +20,7 @@ function App() {
   const [nickName, setNickName] = useState('');
   const [roomList, setRoomList] = useState([]);
   const [showRecentActivity, setShowRecentActivity] = useState(false);
+  const [showUploadedImages, setShowUploadedImages] = useState(false);
 
   // handler shared with navbar component
   const handleLoginClick = () => {
@@ -72,7 +74,7 @@ function App() {
       {/* Navbar inside a Container */}
       <Container>
         {/* Navbar Component */}
-        <Navbar isAuthenticated={isAuthenticated} avatarUrl={avatarUrl} nickName={nickName} setShowRecentActivity={setShowRecentActivity} handleLoginClick={handleLoginClick} />
+        <Navbar isAuthenticated={isAuthenticated} avatarUrl={avatarUrl} nickName={nickName} setShowRecentActivity={setShowRecentActivity} setShowUploadedImages={setShowUploadedImages} handleLoginClick={handleLoginClick} />
       </Container>
 
       {/* Main Container */}
@@ -123,6 +125,9 @@ function App() {
       </Container>
       <Container>
         <ActivityTable show={showRecentActivity} setShow={setShowRecentActivity} sendAlert={(msg,success) => toastRef.current.addToast(msg,success)}/>
+      </Container>
+      <Container>
+        <ImageTable show={showUploadedImages} setShow={setShowUploadedImages} sendAlert={(msg,success) => toastRef.current.addToast(msg,success)}/>
       </Container>
       <Container>
       <ToastManager ref={toastRef} />
