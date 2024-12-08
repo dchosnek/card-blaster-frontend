@@ -28,7 +28,7 @@ const ImageUpload = ({ sendAlert, fetchImages }) => {
       setUploading(true);
 
       // Upload the file
-      const response = await fetch('/api/v1/images', {
+      const response = await fetch('api/v1/images', {
         method: 'POST',
         body: formData,
       });
