@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Col, Container, Modal, ModalBody, ModalHeader, ModalTitle, Row, Table } from 'react-bootstrap';
+import { Alert, Col, Container, Modal, ModalBody, ModalHeader, ModalTitle, Row, Table } from 'react-bootstrap';
 import { BoxArrowUpRight, Copy } from 'react-bootstrap-icons';
 import ImageUpload from '../ImageUpload';
+import ButtonWithTooltipAndPopup from '../ButtonWithTooltipAndPopup';
 
 function ImageTable({ show, setShow, sendAlert }) {
 
@@ -73,7 +74,7 @@ function ImageTable({ show, setShow, sendAlert }) {
                             variant="info"
                             dismissible="true"
                             show={!imageList.length}
-                            >When building cards, any images you include in that card must have a <b>public</b> URL. 
+                        >When building cards, any images you include in that card must have a <b>public</b> URL.
                             Card Blaster enables you to upload your images and provides you with a public URL for each
                             image. You can then use that public URL in the adaptive card designer.
                         </Alert>
@@ -103,19 +104,17 @@ function ImageTable({ show, setShow, sendAlert }) {
                                             <td>{formatDate(image.timestamp)}</td>
                                             <td>{image.filename}</td>
                                             <td>
-                                                <Button
-                                                    className="me-2"    // padding
-                                                    variant="outline-secondary"
+                                                <ButtonWithTooltipAndPopup
+                                                    image={<BoxArrowUpRight />}
+                                                    hint="Show Image"
                                                     onClick={() => openNewTab(image.link)}
-                                                    size="sm">
-                                                    <BoxArrowUpRight />
-                                                </Button>
-                                                <Button
-                                                    variant="outline-secondary"
+                                                />
+                                                <ButtonWithTooltipAndPopup
+                                                    image={<Copy />}
+                                                    hint="Copy Link"
                                                     onClick={() => copyToClipboard(image.link)}
-                                                    size="sm">
-                                                    <Copy />
-                                                </Button>
+                                                    popupText="Copied!"
+                                                />
                                             </td>
                                         </tr>)
                                 })}
