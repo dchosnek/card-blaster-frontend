@@ -3,7 +3,7 @@ import { Navbar as BootstrapNavbar, Container, Dropdown } from 'react-bootstrap'
 import { PersonFill } from 'react-bootstrap-icons';
 import './Navbar.css'; 
 
-function Navbar({ isAuthenticated, avatarUrl, nickName, setShowRecentActivity, setShowUploadedImages, handleLoginClick }) {
+function Navbar({ isAuthenticated, avatarUrl, nickName, setShowRecentActivity, setShowUploadedImages, handleLoginClick, setShowBotForm, botMode }) {
 
     const handleLogoutClick = () => {
         // Make a request to the server-side /logout endpoint
@@ -23,10 +23,12 @@ function Navbar({ isAuthenticated, avatarUrl, nickName, setShowRecentActivity, s
     const handleRecentActivityClick = () => setShowRecentActivity(true);
     // when user clicks "Uploaded Images" set the show state to true for the image list modal
     const handleUploadedImagesClick = () => setShowUploadedImages(true);
+    // when user clicks "Bot mode" set the show state to true for the bot form
+    const handleBotModeClick = () => setShowBotForm(true);
 
     return (
         <Container>
-            <BootstrapNavbar bg="dark" variant="dark" className="mt-3 rounded px-4 d-flex justify-content-between align-items-center">
+            <BootstrapNavbar bg="dark" variant="dark" className="mt-1 rounded px-4 d-flex justify-content-between align-items-center">
                 {/* Left Section: Blaster Icon and Brand Name */}
                 <div className="d-flex align-items-center">
                     {/* Blaster Icon */}
@@ -57,6 +59,8 @@ function Navbar({ isAuthenticated, avatarUrl, nickName, setShowRecentActivity, s
                         <Dropdown.Menu>
                             <Dropdown.Item onClick={handleRecentActivityClick}>Sent Cards</Dropdown.Item>
                             <Dropdown.Item onClick={handleUploadedImagesClick}>Uploaded Images</Dropdown.Item>
+                            <Dropdown.Item onClick={handleBotModeClick} hidden={botMode}>Bot mode</Dropdown.Item>
+                            <Dropdown.Item onClick={handleLoginClick} hidden={!botMode}>Human mode</Dropdown.Item>
                             <Dropdown.Item onClick={handleLogoutClick}>Logout</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>

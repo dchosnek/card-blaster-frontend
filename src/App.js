@@ -6,6 +6,7 @@ import Footer from './components/Footer/Footer';
 import ActivityTable from './components/ActivityTable/ActivityTable';
 import ImageTable from './components/ImageTable';
 import ToastManager from './components/ToastManager';
+import BotModeForm from './components/BotModeForm/BotModeForm';
 
 import './App.css';
 
@@ -21,6 +22,8 @@ function App() {
   const [roomList, setRoomList] = useState([]);
   const [showRecentActivity, setShowRecentActivity] = useState(false);
   const [showUploadedImages, setShowUploadedImages] = useState(false);
+  const [showBotForm, setShowBotForm] = useState(false);
+  const [botMode, setBotMode] = useState(false);
 
   // handler shared with navbar component
   const handleLoginClick = () => {
@@ -58,6 +61,7 @@ function App() {
           setAvatarUrl(data.avatarUrl);
           setIsAuthenticated(data.isAuthenticated);
           setNickName(data.nickName);
+          setBotMode(data.isBot);
         }
       })
       .catch((error) => console.error('Fetch error:', error));
@@ -68,13 +72,20 @@ function App() {
     if (isAuthenticated) { fetchRooms(); }
   }, [isAuthenticated]);
 
-
   return (
     <div className="d-flex flex-column min-vh-100">
       {/* Navbar inside a Container */}
       <Container>
         {/* Navbar Component */}
-        <Navbar isAuthenticated={isAuthenticated} avatarUrl={avatarUrl} nickName={nickName} setShowRecentActivity={setShowRecentActivity} setShowUploadedImages={setShowUploadedImages} handleLoginClick={handleLoginClick} />
+        <Navbar 
+          isAuthenticated={isAuthenticated} 
+          avatarUrl={avatarUrl} 
+          nickName={nickName} 
+          setShowRecentActivity={setShowRecentActivity} 
+          setShowUploadedImages={setShowUploadedImages}
+          setShowBotForm={setShowBotForm} 
+          handleLoginClick={handleLoginClick}
+          botMode={botMode} />
       </Container>
 
       {/* Main Container */}
@@ -128,6 +139,9 @@ function App() {
       </Container>
       <Container>
         <ImageTable show={showUploadedImages} setShow={setShowUploadedImages} sendAlert={(msg,success) => toastRef.current.addToast(msg,success)}/>
+      </Container>
+      <Container>
+        <BotModeForm show={showBotForm} setShow={setShowBotForm} nickName={nickName} sendAlert={(msg,success) => toastRef.current.addToast(msg,success)}/>
       </Container>
       <Container>
       <ToastManager ref={toastRef} />

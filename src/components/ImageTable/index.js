@@ -72,7 +72,6 @@ function ImageTable({ show, setShow, sendAlert }) {
                     <Row>
                         <Alert
                             variant="info"
-                            dismissible="true"
                             show={!imageList.length}
                         >When building cards, any images you include in that card must have a <b>public</b> URL.
                             Card Blaster enables you to upload your images and provides you with a public URL for each
