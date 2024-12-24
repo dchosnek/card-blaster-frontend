@@ -27,7 +27,7 @@ const BotModeForm = ({ show, setShow, sendAlert, nickName }) => {
             // If the resposne is not okay, then display an error and
             // clean up the UI.
             if (response.ok) {
-                window.location.href = '/';
+                window.location.href = `${process.env.PUBLIC_URL}`;
             } else {
                 throw new Error(result.message);
             }
